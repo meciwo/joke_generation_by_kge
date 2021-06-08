@@ -1,0 +1,5 @@
+{
+    "git.ignoreLimitWarning": true,
+    "python.pythonPath": "/Users/shan/.pyenv/versions/3.8.1/bin/python",
+    "python.formatting.provider": "autopep8"
+}
