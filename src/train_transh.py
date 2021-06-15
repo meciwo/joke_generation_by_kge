@@ -6,17 +6,18 @@ from torchkge.sampling import BernoulliNegativeSampler
 from torchkge.utils import MarginLoss, DataLoader
 from torchkge.utils.datasets import load_fb15k
 from utils.datasets import load_joke_dataset
+import pickle
 
 from tqdm.autonotebook import tqdm
 
 use_cuda = False
 # Load dataset
-kg_train = load_joke_dataset('./data')
+kg_train, _, _ = load_joke_dataset('./data', valid_size=100, test_size=100)
 
 # Define some hyper-parameters for training
 emb_dim = 100
 lr = 0.0004
-n_epochs = 5
+n_epochs = 50
 b_size = 32768
 margin = 0.5
 
@@ -59,3 +60,5 @@ for epoch in iterator:
                                               running_loss / len(dataloader)))
 
 model.normalize_parameters()
+with open("./model/kG_2021_5_15.pkl", "wb") as f:
+    pickle.dump(model, f)  # 保存

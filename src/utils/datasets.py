@@ -12,7 +12,7 @@ from torchkge.data_structures import KnowledgeGraph
 from torchkge.utils import get_data_home
 
 
-def load_joke_dataset(data_path):
+def load_joke_dataset(data_path, valid_size, test_size):
     train_path = data_path + '/train2id.txt'
     valid_path = data_path + '/valid2id.txt'
     test_path = data_path + '/test2id.txt'
@@ -29,6 +29,8 @@ def load_joke_dataset(data_path):
     else:
         df3 = DataFrame([], columns=['from', 'rel', 'to'])
     df = concat([df1, df2, df3])
+
     kg = KnowledgeGraph(df)
-    #kg.split_kg(sizes=(len(df1), len(df2), len(df3)))
-    return kg
+    train, valid, test = kg.split_kg(
+        sizes=(len(df1)-valid_size-test_size, valid_size, test_size))
+    return train, valid, test
