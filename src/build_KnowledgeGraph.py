@@ -4,7 +4,7 @@ from tqdm import tqdm
 import pandas as pd
 import spacy
 from spacy import displacy
-from utils.preprocess import sentencize, get_entities, get_relation
+from src.utils.preprocess import sentencize, get_entities, get_relation
 
 
 data = pd.read_csv("data/shortjokes.csv", encoding="utf-8")

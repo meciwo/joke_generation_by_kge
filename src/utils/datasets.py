@@ -1,15 +1,8 @@
-import shutil
-import tarfile
-import zipfile
-
-from os import makedirs, remove
 from os.path import exists
 from pandas import concat, DataFrame, merge, read_csv
-from urllib.request import urlretrieve
 
 from torchkge.data_structures import KnowledgeGraph
-
-from torchkge.utils import get_data_home
+import numpy as np
 
 
 def load_joke_dataset(data_path, valid_size, test_size):
@@ -34,3 +27,9 @@ def load_joke_dataset(data_path, valid_size, test_size):
     train, valid, test = kg.split_kg(
         sizes=(len(df1)-valid_size-test_size, valid_size, test_size))
     return train, valid, test
+
+
+def to_knowledge_graph(head, relation, tail):
+    df = DataFrame(np.reshape([head, relation, tail], [1, 3]),
+                   columns=['from', 'rel', 'to'])
+    return KnowledgeGraph(df)

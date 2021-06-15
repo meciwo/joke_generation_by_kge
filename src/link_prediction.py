@@ -8,7 +8,7 @@ from utils.datasets import load_joke_dataset
 _, kg_valid, kg_test = load_joke_dataset(
     './data', valid_size=100, test_size=100)
 
-with open("./model/KG_2020_5_15.pkl", "rb") as f:
+with open("./model/KG_2021_5_15.pkl", "rb") as f:
     model = pickle.load(f)  # 読み出し
 if cuda.is_available():
     model.cuda()
