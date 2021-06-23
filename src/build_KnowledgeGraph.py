@@ -1,9 +1,5 @@
-from spacy.tokens import Span
-from spacy.matcher import Matcher
 from tqdm import tqdm
 import pandas as pd
-import spacy
-from spacy import displacy
 from src.utils.preprocess import sentencize, get_entities, get_relation
 
 
@@ -13,7 +9,7 @@ KG = []
 
 
 for joke in tqdm(data["Joke"]):
-    for sentence in sentencize(joke):
+    for sentence in sentencize(joke.lower()):
         head, tail = get_entities(sentence.text)
         relation = get_relation(sentence.text)
         KG.append([head, relation, tail])

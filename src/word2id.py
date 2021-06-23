@@ -1,16 +1,18 @@
 import pandas as pd
-from collections import defaultdict
 import pickle
 ke = pd.read_csv("data/knowlegegraph.csv")
-word2id = defaultdict(int)
-
-
-cnt = 0
+word2id = {}
+word2id["<unk>"] = 0
+word2id[""] = 1
+q_words = {"why": 2, "how": 3, "where": 4, "who": 5, "when": 6, "what": 7}
+word2id.update(q_words)
+cnt = 8
 types = ["head", "relation", "tail"]
 for type_ in types:
     for word in ke[type_].values:
-        word2id[word] = cnt
-        cnt += 1
+        if word not in word2id:
+            word2id[word] = cnt
+            cnt += 1
 
 with open("data/train.txt", "w") as f:
 
