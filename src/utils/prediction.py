@@ -1,6 +1,7 @@
 from torch import empty
 from tqdm.autonotebook import tqdm
 from torchkge.utils import DataLoader
+import torch
 
 
 class AnserPredictor(object):
@@ -39,9 +40,10 @@ class AnserPredictor(object):
                              unit='batch', disable=(not verbose),
                              desc='Link prediction evaluation'):
             h_idx, t_idx, r_idx = batch[0], batch[1], batch[2]
-
+            print(h_idx, t_idx, r_idx)
             self.head, self.tail, _, self.relation = self.model.lp_prep_cands(
                 h_idx, t_idx, r_idx)
+            print(self.head, self.tail, self.relation)
 
         self.evaluated = True
 
@@ -50,7 +52,7 @@ class AnserPredictor(object):
             self.tail = self.tail.cpu()
             self.relation = self.relation.cpu()
 
-    def predict(self, pred_obj):
+    def predict(self, pred_obj, topk):
         if pred_obj == "head":
             candidate = self.tail - self.relation
         elif pred_obj == "tail":
@@ -60,6 +62,13 @@ class AnserPredictor(object):
         else:
             raise ValueError
 
-        answer = calc_nearest(candidate)
+        answer = self.calc_nearest(candidate, topk=topk, pred_obj=pred_obj)
 
         return answer
+
+    def calc_nearest(self, candidate, topk, pred_obj):
+        ent_emb, rel_emb = self.model.get_embeddings()
+        if pred_obj == ("head" or "tail"):
+            return torch.argsort(torch.cdist(ent_emb, candidate), dim=0)[:topk].flatten()
+        else:
+            return torch.argsort(torch.cdist(rel_emb, candidate), dim=0)[:topk].flatten()

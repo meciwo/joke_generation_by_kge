@@ -31,5 +31,7 @@ evaluator = AnserPredictor(model, triple)
 
 
 evaluator.evaluate(b_size=1)
-answer = evaluator.predict("head")
-print(answer)
+topk_answers = evaluator.predict("tail", topk=5)
+words = list(vocab.keys())
+for answer in topk_answers:
+    print(words[answer])
