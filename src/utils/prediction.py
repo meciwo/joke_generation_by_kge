@@ -6,9 +6,9 @@ import torch
 
 class AnserPredictor(object):
 
-    def __init__(self, model, knowledge_graph):
+    def __init__(self, model, triple):
         self.model = model
-        self.kg = knowledge_graph
+        self.triple = triple
 
         self.head = None
         self.tail = None
@@ -30,20 +30,9 @@ class AnserPredictor(object):
         """
         use_cuda = next(self.model.parameters()).is_cuda
 
-        if use_cuda:
-            dataloader = DataLoader(self.kg, batch_size=b_size,
-                                    use_cuda='batch')
-        else:
-            dataloader = DataLoader(self.kg, batch_size=b_size)
-
-        for i, batch in tqdm(enumerate(dataloader), total=len(dataloader),
-                             unit='batch', disable=(not verbose),
-                             desc='Link prediction evaluation'):
-            h_idx, t_idx, r_idx = batch[0], batch[1], batch[2]
-            print(h_idx, t_idx, r_idx)
-            self.head, self.tail, _, self.relation = self.model.lp_prep_cands(
-                h_idx, t_idx, r_idx)
-            print(self.head, self.tail, self.relation)
+        h_idx, t_idx, r_idx = self.triple
+        self.head, self.tail, _, self.relation = self.model.lp_prep_cands(
+            h_idx, t_idx, r_idx)
 
         self.evaluated = True
 
