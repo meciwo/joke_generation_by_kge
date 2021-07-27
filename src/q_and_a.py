@@ -5,13 +5,13 @@ from utils.prediction import AnserPredictor
 import torch
 
 
-with open("./model/KG_2020_5_15.pkl", "rb") as f:
+with open("./model/KG_2020_7_27.pkl", "rb") as f:
     model = pickle.load(f)  # 読み出し
 with open("data/vocab.pkl", "rb") as f:
     vocab = pickle.load(f)
-input_question = "What did I make?"
+input_question = "Where did I go to ?"
 sentence = list(sentencize(input_question.lower()))[0]
-print(sentence)
+print("Input:", sentence)
 head, tail = get_entities(sentence.text)
 relation = get_relation(sentence.text)
 print(f'head: {head}, tail: {tail}, relation: {relation}')
@@ -40,5 +40,5 @@ else:
 evaluator.evaluate(b_size=1)
 topk_answers = evaluator.predict(pred_obj=target, topk=5)
 words = list(vocab.keys())
-for answer in topk_answers:
-    print(words[answer])
+for i, answer in enumerate(topk_answers):
+    print(i, words[answer])
