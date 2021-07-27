@@ -6,6 +6,10 @@ nlp = spacy.load('en_core_web_sm')
 nlp.add_pipe(nlp.create_pipe("sentencizer"))
 
 
+def is_interrogative(tok):
+    return tok.dep_ == "advmod" and tok.pos_ == "PRON"
+
+
 def get_entities(sent):
     # chunk 1
     ent1 = ""
@@ -21,17 +25,17 @@ def get_entities(sent):
 
     for tok in nlp(sent):
         # chunk 2
-        # if token is a punctuation mark then move on to the next token
+        # if token is a punctuation mark then move on to the next token(句読点ならスキップ)
         if tok.dep_ != "punct":
-            # check: token is a compound word or not
+            # check: token is a compound word(複合名詞) or not
             if tok.dep_ == "compound":
                 prefix = tok.text
                 # if the previous word was also a 'compound' then add the current word to it
                 if prv_tok_dep == "compound":
                     prefix = prv_tok_text + " " + tok.text
 
-            # check: token is a modifier or not
-            if tok.dep_.endswith("mod") == True:
+            # check: token is a modifier(修飾語) or not
+            if tok.dep_.endswith("mod") == True and not is_interrogative(tok):
                 modifier = tok.text
                 # if the previous word was also a 'compound' then add the current word to it
                 if prv_tok_dep == "compound":
@@ -46,7 +50,7 @@ def get_entities(sent):
                 prv_tok_text = ""
 
             # chunk 4
-            if tok.dep_.find("obj") == True:
+            if tok.dep_.find("obj") == True or is_interrogative(tok):
                 ent2 = modifier + " " + prefix + " " + tok.text
 
             # chunk 5
@@ -55,7 +59,7 @@ def get_entities(sent):
             prv_tok_text = tok.text
     #############################################################
 
-    return [ent1.strip(), ent2.strip()]
+    return ent1.strip(), ent2.strip()
 
 
 def get_relation(sent):
