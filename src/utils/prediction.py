@@ -1,11 +1,7 @@
-from torch import empty
-from tqdm.autonotebook import tqdm
-from torchkge.utils import DataLoader
 import torch
 
 
 class AnserPredictor(object):
-
     def __init__(self, model, triple):
         self.model = model
         self.triple = triple
@@ -32,7 +28,8 @@ class AnserPredictor(object):
 
         h_idx, t_idx, r_idx = self.triple
         self.head, self.tail, _, self.relation = self.model.lp_prep_cands(
-            h_idx, t_idx, r_idx)
+            h_idx, t_idx, r_idx
+        )
 
         self.evaluated = True
 
@@ -58,6 +55,10 @@ class AnserPredictor(object):
     def calc_nearest(self, candidate, topk, pred_obj):
         ent_emb, rel_emb = self.model.get_embeddings()
         if pred_obj == ("head" or "tail"):
-            return torch.argsort(torch.cdist(ent_emb, candidate), dim=0)[:topk].flatten()
+            return torch.argsort(torch.cdist(ent_emb, candidate), dim=0)[
+                :topk
+            ].flatten()
         else:
-            return torch.argsort(torch.cdist(rel_emb, candidate), dim=0)[:topk].flatten()
+            return torch.argsort(torch.cdist(rel_emb, candidate), dim=0)[
+                :topk
+            ].flatten()

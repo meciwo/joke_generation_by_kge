@@ -5,18 +5,18 @@ from utils.prediction import AnserPredictor
 import torch
 
 
-with open("./model/KG_2020_7_27.pkl", "rb") as f:
+with open("./model/kG_2021_7_27.pkl", "rb") as f:
     model = pickle.load(f)  # 読み出し
 with open("data/vocab.pkl", "rb") as f:
     vocab = pickle.load(f)
-input_question = "Where did I go to ?"
+input_question = "Where did I go?"
 sentence = list(sentencize(input_question.lower()))[0]
 print("Input:", sentence)
 head, tail = get_entities(sentence.text)
 relation = get_relation(sentence.text)
-print(f'head: {head}, tail: {tail}, relation: {relation}')
+print(f"head: {head}, tail: {tail}, relation: {relation}")
 head, tail, relation = vocab[head], vocab[tail], vocab[relation]
-print(f'head:{head}, tail: {tail}, relation: {relation}')
+print(f"head:{head}, tail: {tail}, relation: {relation}")
 
 
 # 疑問詞を特定

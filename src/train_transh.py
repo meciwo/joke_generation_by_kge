@@ -9,9 +9,9 @@ import pickle
 
 from tqdm.autonotebook import tqdm
 
-use_cuda = False
+use_cuda = True
 # Load dataset
-kg_train, _, _ = load_joke_dataset('./data', valid_size=100, test_size=100)
+kg_train, _, _ = load_joke_dataset("./data", valid_size=100, test_size=100)
 
 # Define some hyper-parameters for training
 emb_dim = 100
@@ -21,12 +21,11 @@ b_size = 32768
 margin = 0.5
 
 # Define the model and criterion
-model = TransEModel(emb_dim, kg_train.n_ent,
-                    kg_train.n_rel, dissimilarity_type='L2')
+model = TransEModel(emb_dim, kg_train.n_ent, kg_train.n_rel, dissimilarity_type="L2")
 criterion = MarginLoss(margin)
 
 # Move everything to CUDA if available
-if cuda.is_available():
+if cuda.is_available() and use_cuda:
     cuda.empty_cache()
     model.cuda()
     criterion.cuda()
@@ -38,7 +37,7 @@ optimizer = Adam(model.parameters(), lr=lr, weight_decay=1e-5)
 sampler = BernoulliNegativeSampler(kg_train)
 dataloader = DataLoader(kg_train, batch_size=b_size, use_cuda=use_cuda)
 
-iterator = tqdm(range(n_epochs), unit='epoch')
+iterator = tqdm(range(n_epochs), unit="epoch")
 for epoch in iterator:
     running_loss = 0.0
     for i, batch in enumerate(dataloader):
@@ -55,8 +54,8 @@ for epoch in iterator:
 
         running_loss += loss.item()
     iterator.set_description(
-        'Epoch {} | mean loss: {:.5f}'.format(epoch + 1,
-                                              running_loss / len(dataloader)))
+        "Epoch {} | mean loss: {:.5f}".format(epoch + 1, running_loss / len(dataloader))
+    )
 
 model.normalize_parameters()
 with open("./model/kG_2021_7_27.pkl", "wb") as f:

@@ -1,6 +1,7 @@
 import pandas as pd
 import pickle
-ke = pd.read_csv("data/knowlegegraph.csv")
+
+ke = pd.read_csv("data/knowlegegraph_2.csv")
 word2id = {}
 word2id["<unk>"] = 0
 word2id[""] = 1
@@ -14,11 +15,17 @@ for type_ in types:
             word2id[word] = cnt
             cnt += 1
 
-with open("data/train.txt", "w") as f:
+with open("data/train2id.txt", "w") as f:
 
     for head, relation, tail in ke[types].values:
-        f.write(str(word2id[head])+" "+str(word2id[tail]) +
-                " "+str(word2id[relation])+"\n")
+        f.write(
+            str(word2id[head])
+            + " "
+            + str(word2id[tail])
+            + " "
+            + str(word2id[relation])
+            + "\n"
+        )
 
 with open("data/vocab.pkl", "wb") as f:
     pickle.dump(word2id, f)  # 保存

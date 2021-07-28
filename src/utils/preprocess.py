@@ -2,12 +2,12 @@ from spacy.tokens import Span
 from spacy.matcher import Matcher
 import spacy
 
-nlp = spacy.load('en_core_web_sm')
+nlp = spacy.load("en_core_web_sm")
 nlp.add_pipe(nlp.create_pipe("sentencizer"))
 
 
 def is_interrogative(tok):
-    return tok.dep_ == "advmod" and tok.pos_ == "PRON"
+    return tok.dep_ == "advmod" and tok.pos_ == "ADV"
 
 
 def get_entities(sent):
@@ -15,8 +15,8 @@ def get_entities(sent):
     ent1 = ""
     ent2 = ""
 
-    prv_tok_dep = ""    # dependency tag of previous token in the sentence
-    prv_tok_text = ""   # previous token in the sentence
+    prv_tok_dep = ""  # dependency tag of previous token in the sentence
+    prv_tok_text = ""  # previous token in the sentence
 
     prefix = ""
     modifier = ""
@@ -70,18 +70,20 @@ def get_relation(sent):
     matcher = Matcher(nlp.vocab)
 
     # define the pattern
-    pattern = [{'DEP': 'ROOT'},
-               {'DEP': 'prep', 'OP': "?"},
-               {'DEP': 'agent', 'OP': "?"},
-               {'POS': 'ADJ', 'OP': "?"}]
+    pattern = [
+        {"DEP": "ROOT"},
+        {"DEP": "prep", "OP": "?"},
+        {"DEP": "agent", "OP": "?"},
+        {"POS": "ADJ", "OP": "?"},
+    ]
     matcher.add("matching_1", [pattern])
 
     matches = matcher(doc)
     k = len(matches) - 1
 
-    span = doc[matches[k][1]:matches[k][2]]
+    span = doc[matches[k][1] : matches[k][2]]
 
-    return(span.text)
+    return span.text
 
 
 def sentencize(joke):
