@@ -66,4 +66,4 @@ for epoch in iterator:
     )
 
 model.normalize_parameters()
-torch.save(model.to("cpu").state_dict(), model_path)
+torch.save(model.to("cpu"), model_path)
