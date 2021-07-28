@@ -1,7 +1,14 @@
 import pandas as pd
 import pickle
+import configparser
 
-ke = pd.read_csv("data/knowlegegraph_2.csv")
+config = configparser.ConfigParser()
+config.read("config.ini")
+kg_path = config["Paths"]["KnowlegeGraphPath"]
+train_path = config["Paths"]["TrainDataPath"]
+vocab_path = config["Paths"]["VocabPath"]
+
+ke = pd.read_csv(kg_path)
 word2id = {}
 word2id["<unk>"] = 0
 word2id[""] = 1
@@ -15,7 +22,7 @@ for type_ in types:
             word2id[word] = cnt
             cnt += 1
 
-with open("data/train2id.txt", "w") as f:
+with open(train_path, "w") as f:
 
     for head, relation, tail in ke[types].values:
         f.write(
@@ -27,5 +34,5 @@ with open("data/train2id.txt", "w") as f:
             + "\n"
         )
 
-with open("data/vocab.pkl", "wb") as f:
+with open(vocab_path, "wb") as f:
     pickle.dump(word2id, f)  # 保存

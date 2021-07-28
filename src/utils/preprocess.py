@@ -3,7 +3,7 @@ from spacy.matcher import Matcher
 import spacy
 
 nlp = spacy.load("en_core_web_sm")
-nlp.add_pipe(nlp.create_pipe("sentencizer"))
+nlp.add_pipe("sentencizer")
 
 
 def is_interrogative(tok):

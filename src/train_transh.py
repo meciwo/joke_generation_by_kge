@@ -1,13 +1,18 @@
 from torch import cuda
 from torch.optim import Adam
+import torch
 
 from torchkge.models import TransEModel
 from torchkge.sampling import BernoulliNegativeSampler
 from torchkge.utils import MarginLoss, DataLoader
 from utils.datasets import load_joke_dataset
-import pickle
 
 from tqdm.autonotebook import tqdm
+import configparser
+
+config = configparser.ConfigParser()
+config.read("config.ini")
+model_path = config["Paths"]["ModelPath"]
 
 use_cuda = True
 # Load dataset
@@ -61,5 +66,4 @@ for epoch in iterator:
     )
 
 model.normalize_parameters()
-with open("./model/kg_2021_7_27.pkl", "wb") as f:
-    pickle.dump(model, f)  # 保存
+torch.save(model.to("cpu").state_dict(), model_path)

@@ -8,6 +8,7 @@ authors = ["meciwo <shanshan0474@gmail.com>"]
 python = "^3.8"
 stanford-openie = "^1.0.3"
 torchkge = "^0.16.25"
+spacy = "^3.1.1"
 
 [tool.poetry.dev-dependencies]
 black = {version = "^21.7b0", allow-prereleases = true}

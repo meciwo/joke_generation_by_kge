@@ -1,13 +1,18 @@
+import configparser
 from torch import cuda
 import pickle
 from utils.preprocess import get_entities, get_relation, sentencize
 from utils.prediction import AnserPredictor
 import torch
 
+config = configparser.ConfigParser()
+config.read("config.ini")
+model_path = config["Paths"]["ModelPath"]
+vocab_path = config["Paths"]["VocabPath"]
 
-with open("./model/kG_2021_7_27.pkl", "rb") as f:
-    model = pickle.load(f)  # 読み出し
-with open("data/vocab.pkl", "rb") as f:
+with open(model_path, "rb") as f:
+    model = torch.load(f, map_location="cpu")  # 読み出し
+with open(vocab_path, "rb") as f:
     vocab = pickle.load(f)
 input_question = "Where did I go?"
 sentence = list(sentencize(input_question.lower()))[0]
