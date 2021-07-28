@@ -46,6 +46,9 @@ for epoch in iterator:
 
         optimizer.zero_grad()
 
+        if use_cuda:
+            h, t, r, n_h, n_t = h.cuda(), t.cuda(), r.cuda(), n_h.cuda(), n_t.cuda()
+
         # forward + backward + optimize
         pos, neg = model(h, t, n_h, n_t, r)
         loss = criterion(pos, neg)
@@ -58,5 +61,5 @@ for epoch in iterator:
     )
 
 model.normalize_parameters()
-with open("./model/kG_2021_7_27.pkl", "wb") as f:
+with open("./model/kg_2021_7_27.pkl", "wb") as f:
     pickle.dump(model, f)  # 保存
