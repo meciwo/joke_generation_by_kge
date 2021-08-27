@@ -410,6 +410,25 @@ dev = ["check-manifest"]
 test = ["coverage"]
 
 [[package]]
+name = "stanza"
+version = "1.2.3"
+description = "A Python NLP Library for Many Human Languages, by the Stanford NLP Group"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+numpy = "*"
+protobuf = "*"
+requests = "*"
+torch = ">=1.3.0"
+tqdm = "*"
+
+[package.extras]
+dev = ["check-manifest"]
+test = ["coverage"]
+
+[[package]]
 name = "thinc"
 version = "8.0.8"
 description = "A refreshing functional take on deep learning, compatible with your favorite libraries"
@@ -549,7 +568,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "9c045e3db1ec8ce0b7d5f6b35c107e12a3217e482e31a5960d1eff45f9de07d9"
+content-hash = "3a133cc3ec68c3c6934c1b5bdbd66880f0539dfc38105264c935d7e23131a19e"
 
 [metadata.files]
 appdirs = [
@@ -919,6 +938,10 @@ stanford-openie = [
 stanfordnlp = [
     {file = "stanfordnlp-0.2.0-py3-none-any.whl", hash = "sha256:66450f0b422e649e8b31f171260930b733324b000ebfe81c436328b424425902"},
     {file = "stanfordnlp-0.2.0.tar.gz", hash = "sha256:a8bd56dfef23cbb1e1c461469ac5bdd4563c24f360befe300a7d97cb51b49a49"},
+]
+stanza = [
+    {file = "stanza-1.2.3-py3-none-any.whl", hash = "sha256:b11a96791f34046b71d1760ad5ab7afdd536c18592909318a69876b308183904"},
+    {file = "stanza-1.2.3.tar.gz", hash = "sha256:6a27f1990f4981d982939198d5c872b93fd6e1858345a915e33f42fc50b3cf22"},
 ]
 thinc = [
     {file = "thinc-8.0.8-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:68401890470062eaa3bcd0cd0bc5ad52a6fa77da87336a927df18c21dbf0ba30"},
