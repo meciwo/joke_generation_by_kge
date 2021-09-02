@@ -2,6 +2,7 @@
 
 - 知識グラフ構築
 `python src/build_KnowledgeGraph.py`
+
 `python src/word2id.py`
 
 - モデル学習
