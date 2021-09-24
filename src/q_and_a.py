@@ -16,6 +16,7 @@ model = torch.load(model_path, map_location="cpu")  # 読み出し
 with open(vocab_path, "rb") as f:
     vocab = pickle.load(f)
 input_question = "what does the word china mean in chinese?"
+input_question = input()
 sentence = list(sentencize(input_question.lower()))[0]
 print("Input:", sentence)
 head, tail = get_entities(sentence.text)
@@ -47,4 +48,6 @@ evaluator.evaluate(b_size=1)
 topk_answers = evaluator.predict(pred_obj=target, topk=5)
 words = list(vocab.keys())
 for i, answer in enumerate(topk_answers):
+    if i == 0:
+        continue
     print(i, words[answer])
