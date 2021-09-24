@@ -46,7 +46,7 @@ iterator = tqdm(range(n_epochs), unit="epoch")
 for epoch in iterator:
     running_loss = 0.0
     for i, batch in enumerate(dataloader):
-        h, r, t = batch[0], batch[1], batch[2]
+        h, t, r = batch[0], batch[1], batch[2]
         n_h, n_t = sampler.corrupt_batch(h, t, r)
 
         optimizer.zero_grad()
