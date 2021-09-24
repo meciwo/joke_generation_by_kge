@@ -28,9 +28,9 @@ with open(train_path, "w") as f:
         f.write(
             str(word2id[head])
             + " "
-            + str(word2id[tail])
-            + " "
             + str(word2id[relation])
+            + " "
+            + str(word2id[tail])
             + "\n"
         )
 
