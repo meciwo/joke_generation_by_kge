@@ -19,11 +19,11 @@ use_cuda = True
 kg_train, _, _ = load_joke_dataset("./data", valid_size=100, test_size=100)
 
 # Define some hyper-parameters for training
-emb_dim = 100
-lr = 0.0004
-n_epochs = 500
-b_size = 32768
-margin = 0.5
+emb_dim = int(config["Hyparas"]["emb_dim"])
+lr = float(config["Hyparas"]["lr"])
+n_epochs = int(config["Hyparas"]["n_epochs"])
+b_size = int(config["Hyparas"]["b_size"])
+margin = float(config["Hyparas"]["margin"])
 
 # Define the model and criterion
 model = TransEModel(emb_dim, kg_train.n_ent, kg_train.n_rel, dissimilarity_type="L2")
