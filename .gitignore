@@ -1,3 +1,5 @@
 .vscode
 /model
 .venv
+**/__pycache__/**
+*.tmp

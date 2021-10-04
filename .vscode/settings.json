@@ -1,8 +1,0 @@
-{
-    "git.ignoreLimitWarning": true,
-    "python.pythonPath": "/Users/shan/JokeGeneration_KGE/.venv/bin/python",
-    "python.formatting.provider": "black",
-    "python.analysis.extraPaths": [
-        "./src"
-    ]
-}
