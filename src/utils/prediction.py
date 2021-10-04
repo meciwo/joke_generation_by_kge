@@ -1,9 +1,10 @@
 import torch
+from torchkge.models import TransEModel
 
 
 class AnserPredictor(object):
     def __init__(self, model, triple):
-        self.model = model
+        self.model: TransEModel = model
         self.triple = triple
 
         self.head = None
