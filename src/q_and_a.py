@@ -49,8 +49,11 @@ else:
 
 evaluator.evaluate(b_size=1)
 topk_answers = evaluator.predict(pred_obj=target, topk=10)
-words = list(vocab.keys())
+
 for i, answer in enumerate(topk_answers):
     if i == 0:
         continue
-    print(i, words[answer])
+    if target == "head" or target == "tail":
+        print(i, ent_vocab[answer])
+    else:
+        print(i, ent_vocab[answer])

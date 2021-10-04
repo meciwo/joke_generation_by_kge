@@ -36,6 +36,9 @@ for i, word in enumerate(set(list(ke["relation"].values)), start=cnt):
     if word not in rel_word2id:
         rel_word2id[word] = i
 
+print(f"ent vocab size:{len(ent_word2id)}")
+print(f"rel vacab size:{len(rel_word2id)}")
+
 
 with open(train_path, "w") as f:
 

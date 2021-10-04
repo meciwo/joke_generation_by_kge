@@ -14,7 +14,7 @@ config = configparser.ConfigParser()
 config.read("config.ini")
 model_path = config["Paths"]["ModelPath"]
 
-use_cuda = True
+use_cuda = config["Settings"]["use_cuda"]
 # Load dataset
 kg_train, _, _ = load_joke_dataset("./data", valid_size=100, test_size=100)
 
@@ -34,7 +34,8 @@ if cuda.is_available() and use_cuda:
     cuda.empty_cache()
     model.cuda()
     criterion.cuda()
-    use_cuda = True
+else:
+    use_cuda = False
 
 # Define the torch optimizer to be used
 optimizer = Adam(model.parameters(), lr=lr, weight_decay=1e-5)
