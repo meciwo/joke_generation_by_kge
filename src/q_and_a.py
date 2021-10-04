@@ -11,7 +11,7 @@ config = configparser.ConfigParser()
 config.read("config.ini")
 model_path = config["Paths"]["ModelPath"]
 ent_vocab_path = config["Paths"]["EntVocabPath"]
-rel_vocab_path = config["Pahts"]["RelVocabPath"]
+rel_vocab_path = config["Paths"]["RelVocabPath"]
 
 model = torch.load(model_path, map_location="cpu")  # 読み出し
 with open(ent_vocab_path, "rb") as f:
@@ -19,6 +19,7 @@ with open(ent_vocab_path, "rb") as f:
 with open(rel_vocab_path, "rb") as f:
     rel_vocab = pickle.load(f)
 input_question = "what does the word china mean in chinese?"
+print("please input your question:")
 input_question = input()
 sentence = list(sentencize(input_question.lower()))[0]
 print("Input:", sentence)
@@ -49,11 +50,13 @@ else:
 
 evaluator.evaluate(b_size=1)
 topk_answers = evaluator.predict(pred_obj=target, topk=10)
+ent_word = list(ent_vocab.keys())
+rel_word = list(rel_vocab.keys())
 
 for i, answer in enumerate(topk_answers):
     if i == 0:
         continue
     if target == "head" or target == "tail":
-        print(i, ent_vocab[answer])
+        print(i, ent_word[answer])
     else:
         print(i, ent_vocab[answer])
