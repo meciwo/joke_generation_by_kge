@@ -61,8 +61,9 @@ def main():
     training_log_path = config["Paths"]["TrainingLogPath"]
     date = config["Paths"]["Date"]
 
-    use_cuda = config["Settings"]["use_cuda"]
-    dry_run = config["Settings"]["dry_run"]
+    use_cuda = config["Settings"]["use_cuda"] == "True"
+    dry_run = config["Settings"]["dry_run"] == "True"
+
     # Load dataset
     kg_train, _, _ = load_joke_dataset(
         "./data", valid_size=100, test_size=100, dry_run=dry_run
