@@ -12,8 +12,9 @@ config.read("config.ini")
 model_path = config["Paths"]["ModelPath"]
 ent_vocab_path = config["Paths"]["EntVocabPath"]
 rel_vocab_path = config["Paths"]["RelVocabPath"]
+date = config["Paths"]["Date"]
 
-model = torch.load(model_path, map_location="cpu")  # 読み出し
+model = torch.load(model_path + date + ".pkl", map_location="cpu")  # 読み出し
 with open(ent_vocab_path, "rb") as f:
     ent_vocab = pickle.load(f)
 with open(rel_vocab_path, "rb") as f:
@@ -54,8 +55,6 @@ ent_word = list(ent_vocab.keys())
 rel_word = list(rel_vocab.keys())
 
 for i, answer in enumerate(topk_answers):
-    if i == 0:
-        continue
     if target == "head" or target == "tail":
         print(i, ent_word[answer])
     else:
