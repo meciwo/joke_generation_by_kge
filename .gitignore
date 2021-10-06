@@ -4,3 +4,4 @@
 **/__pycache__/**
 *.tmp
 logs/
+img/
