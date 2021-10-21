@@ -1,7 +1,9 @@
+from typing import List
 from tqdm import tqdm
 import pandas as pd
 from openie import MyOpenIE
 import configparser
+from utils.swear_word_cleaner import is_contain_profanity_in_triple
 
 config = configparser.ConfigParser()
 config.read("config.ini")
@@ -23,7 +25,13 @@ with MyOpenIE() as client:
             simple_format=True,
         )
         for triple in ann:
-            kg.append([triple["subject"], triple["relation"], triple["object"]])
+            _triple: List[str] = [
+                triple["subject"],
+                triple["relation"],
+                triple["object"],
+            ]
+            if not is_contain_profanity_in_triple(_triple):
+                kg.append(_triple)
 
 kg_df = pd.DataFrame(kg, columns=["head", "relation", "tail"]).drop_duplicates()
 kg_df.to_csv(kg_path)

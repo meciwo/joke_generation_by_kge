@@ -11,6 +11,10 @@ torchkge = "^0.16.25"
 spacy = "^3.1.1"
 stanza = "^1.2.3"
 matplotlib = "^3.4.3"
+better-profanity = "^0.7.0"
+networkx = "^2.6.3"
+ipykernel = "^6.4.2"
+pygraphviz = "^1.7"
 
 [tool.poetry.dev-dependencies]
 black = {version = "^21.7b0", allow-prereleases = true}
