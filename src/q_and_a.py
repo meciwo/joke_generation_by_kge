@@ -7,6 +7,8 @@ from utils.preprocess import get_entities, get_relation, sentencize
 from utils.prediction import AnserPredictor
 import torch
 
+from visualize_graph import visualize
+
 
 def main():
     config = configparser.ConfigParser()
@@ -26,12 +28,17 @@ def main():
         try:
             print("please input your question:")
             input_question = input()
+            input_question = "what does horse eat?"
             sentence = list(sentencize(input_question.lower()))[0]
             print("Input:", sentence)
-            head, tail = get_entities(sentence.text)
-            relation = get_relation(sentence.text)
-            print(f"head: {head}, tail: {tail}, relation: {relation}")
-            head, tail, relation = ent_vocab[head], ent_vocab[tail], rel_vocab[relation]
+            head_w, tail_w = get_entities(sentence.text)
+            relation_w = get_relation(sentence.text)
+            print(f"head: {head_w}, tail: {tail_w}, relation: {relation_w}")
+            head, tail, relation = (
+                ent_vocab[head_w],
+                ent_vocab[tail_w],
+                rel_vocab[relation_w],
+            )
             print(f"head:{head}, tail: {tail}, relation: {relation}")
 
             # 疑問詞を特定
@@ -63,12 +70,15 @@ def main():
     topk_answers = evaluator.predict(pred_obj=target, topk=10)
     ent_word = list(ent_vocab.keys())
     rel_word = list(rel_vocab.keys())
-
+    print(len(ent_word))
+    print(len(rel_word))
     for i, answer in enumerate(topk_answers):
         if target == "head" or target == "tail":
             print(i, ent_word[answer])
         else:
             print(i, rel_word[answer])
+
+    visualize(head_w, relation_w, tail_w)
 
 
 if __name__ == "__main__":

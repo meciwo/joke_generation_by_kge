@@ -7,7 +7,7 @@ from torchkge.models import TransEModel
 from torchkge.models.interfaces import TranslationModel
 from torchkge.sampling import BernoulliNegativeSampler, NegativeSampler
 from torchkge.utils import MarginLoss, DataLoader
-from utils.datasets import load_joke_dataset
+from utils.datasets import load_joke_dataset, load_wiki_dataset
 
 from tqdm.autonotebook import tqdm
 import configparser
@@ -15,7 +15,7 @@ import numpy as np
 
 
 def train(
-    model: TranslationModel,
+    model: TransEModel,
     use_cuda: bool,
     criterion: MarginLoss,
     optimizer: Optimizer,
@@ -49,7 +49,7 @@ def train(
             )
         )
         losses.append(running_loss / len(dataloader))
-
+        model.normalize_parameters()
     model.normalize_parameters()
     return model, losses
 
@@ -62,6 +62,7 @@ def main():
     date = config["Paths"]["Date"]
 
     use_cuda = config["Settings"]["use_cuda"] == "True"
+    use_wiki = config["Settings"]["use_wiki"] == "True"
     dry_run = config["Settings"]["dry_run"] == "True"
 
     # Load dataset
@@ -77,11 +78,20 @@ def main():
     margin = float(config["Hyparas"]["margin"])
 
     if dry_run:
-        emb_dim, n_epochs = 10, 10
+        emb_dim, n_epochs = 100, 10
+
+    ent_emb, rel_emb = None, None
+    if use_wiki:
+        ent_emb, rel_emb = load_wiki_dataset(kg_train)
 
     # Define the model and criterion
     model = TransEModel(
-        emb_dim, kg_train.n_ent, kg_train.n_rel, dissimilarity_type="L2"
+        emb_dim,
+        kg_train.n_ent,
+        kg_train.n_rel,
+        ent_emb,
+        rel_emb,
+        dissimilarity_type="L2",
     )
     criterion = MarginLoss(margin)
     optimizer = Adam(model.parameters(), lr=lr, weight_decay=1e-5)

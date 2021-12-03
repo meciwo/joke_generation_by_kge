@@ -15,6 +15,8 @@ better-profanity = "^0.7.0"
 networkx = "^2.6.3"
 ipykernel = "^6.4.2"
 pygraphviz = "^1.7"
+streamlit = "^1.1.0"
+wikipedia2vec = "^1.0.5"
 
 [tool.poetry.dev-dependencies]
 black = {version = "^21.7b0", allow-prereleases = true}
