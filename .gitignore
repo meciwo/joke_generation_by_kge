@@ -1,0 +1,9 @@
+.vscode
+/model
+.venv
+**/__pycache__/**
+*.tmp
+logs/
+img/
+**/.DS_Store/**
+data/wiki2vec*
