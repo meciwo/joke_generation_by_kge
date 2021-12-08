@@ -26,15 +26,16 @@ rel_word2id.update(q_words)
 cnt = 8
 types = ["head", "relation", "tail"]
 
-for i, word in enumerate(
-    set(list(ke["head"].values) + list(ke["tail"].values)), start=cnt
-):
+for word in list(ke["head"].values) + list(ke["tail"].values):
     if word not in ent_word2id:
-        ent_word2id[word] = i
+        ent_word2id[word] = cnt
+        cnt += 1
 
+cnt = 8
 for i, word in enumerate(set(list(ke["relation"].values)), start=cnt):
     if word not in rel_word2id:
-        rel_word2id[word] = i
+        rel_word2id[word] = cnt
+        cnt += 1
 
 print(f"ent vocab size:{len(ent_word2id)}")
 print(f"rel vacab size:{len(rel_word2id)}")
