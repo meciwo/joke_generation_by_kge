@@ -78,11 +78,11 @@ def main():
     margin = float(config["Hyparas"]["margin"])
 
     if dry_run:
-        emb_dim, n_epochs = 100, 10
+        n_epochs = 10
 
     ent_emb, rel_emb = None, None
     if use_wiki:
-        ent_emb, rel_emb = load_wiki_dataset(kg_train)
+        ent_emb, rel_emb = load_wiki_dataset(kg_train, emb_dim)
 
     # Define the model and criterion
     model = TransEModel(
