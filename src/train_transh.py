@@ -118,8 +118,14 @@ def main():
     )
 
     if not dry_run:
-        torch.save(model.to("cpu"), model_path + date + ".pkl")
-        np.save(training_log_path + date, losses)
+        file_name = (
+            model_path + date + "_wiki.pkl" if use_wiki else model_path + date + ".pkl"
+        )
+        torch.save(model.to("cpu"), file_name)
+        log_name = (
+            training_log_path + date + "_wiki" if use_wiki else training_log_path + date
+        )
+        np.save(log_name, losses)
 
 
 if __name__ == "__main__":
