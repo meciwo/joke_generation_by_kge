@@ -28,7 +28,7 @@ def main():
         try:
             print("please input your question:")
             input_question = input()
-            input_question = "what does horse eat?"
+            # input_question = "what does horse eat?"
             sentence = list(sentencize(input_question.lower()))[0]
             print("Input:", sentence)
             head_w, tail_w = get_entities(sentence.text)

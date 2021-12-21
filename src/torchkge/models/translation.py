@@ -78,6 +78,7 @@ class TransEModel(TranslationModel):
 
         self.normalize_parameters()
         self.rel_emb.weight.data = normalize(self.rel_emb.weight.data, p=2, dim=1)
+        self.emb_dim = emb_dim
 
     def scoring_function(self, h_idx, t_idx, r_idx):
         """Compute the scoring function for the triplets given as argument:
