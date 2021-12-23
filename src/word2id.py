@@ -2,12 +2,16 @@ import pandas as pd
 import pickle
 import configparser
 
+from utils.datasets import load_joke_dataset
+
 config = configparser.ConfigParser()
 config.read("config.ini")
 kg_path = config["Paths"]["KnowlegeGraphPath"]
 train_path = config["Paths"]["TrainDataPath"]
 ent_vocab_path = config["Paths"]["EntVocabPath"]
 rel_vocab_path = config["Paths"]["RelVocabPath"]
+ent_id2idx_path = config["Paths"]["Entid2idxPath"]
+rel_id2idx_path = config["Paths"]["Relid2idxPath"]
 
 ke = pd.read_csv(kg_path)
 ent_word2id, rel_word2id = {}, {}
@@ -32,7 +36,7 @@ for word in list(ke["head"].values) + list(ke["tail"].values):
         cnt += 1
 
 cnt = 8
-for i, word in enumerate(set(list(ke["relation"].values)), start=cnt):
+for word in ke["relation"].values:
     if word not in rel_word2id:
         rel_word2id[word] = cnt
         cnt += 1
@@ -58,3 +62,13 @@ with open(ent_vocab_path, "wb") as f:
 
 with open(rel_vocab_path, "wb") as f:
     pickle.dump(rel_word2id, f)  # 保存
+
+kg_train, _, _ = load_joke_dataset("./data", valid_size=100, test_size=100)
+
+ent_id2idx, rel_id2idx = kg_train.ent2ix, kg_train.rel2ix
+
+with open(ent_id2idx_path, "wb") as f:
+    pickle.dump(ent_id2idx, f)
+
+with open(rel_id2idx_path, "wb") as f:
+    pickle.dump(rel_id2idx, f)
