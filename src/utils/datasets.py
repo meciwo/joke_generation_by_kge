@@ -15,8 +15,7 @@ import pickle
 config = configparser.ConfigParser()
 config.read("config.ini")
 wiki_vec_path = config["Paths"]["WikiVecPath"]
-ent_vocab_path = config["Paths"]["EntVocabPath"]
-rel_vocab_path = config["Paths"]["RelVocabPath"]
+kg_path = config["Paths"]["KnowlegeGraphPath"]
 
 
 def load_joke_dataset(data_path, valid_size, test_size, dry_run: bool = False):
@@ -24,21 +23,21 @@ def load_joke_dataset(data_path, valid_size, test_size, dry_run: bool = False):
     valid_path = data_path + "/valid2id.txt"
     test_path = data_path + "/test2id.txt"
     df1 = read_csv(
-        train_path,
-        sep=" ",
-        header=None,
+        kg_path,
         names=["from", "rel", "to"],
         nrows=500 if dry_run else None,
     )
-    if exists(valid_path):
-        df2 = read_csv(valid_path, sep=" ", header=None, names=["from", "rel", "to"])
-    else:
-        df2 = DataFrame([], columns=["from", "rel", "to"])
-    if exists(test_path):
-        df3 = read_csv(test_path, sep=" ", header=None, names=["from", "rel", "to"])
-    else:
-        df3 = DataFrame([], columns=["from", "rel", "to"])
-    df = concat([df1, df2, df3])
+    df1 = df1.fillna("")
+    # if exists(valid_path):
+    #    df2 = read_csv(valid_path, sep=" ", header=None, names=["from", "rel", "to"])
+    # else:
+    #    df2 = DataFrame([], columns=["from", "rel", "to"])
+    # if exists(test_path):
+    #    df3 = read_csv(test_path, sep=" ", header=None, names=["from", "rel", "to"])
+    # else:
+    #    df3 = DataFrame([], columns=["from", "rel", "to"])
+    # df = concat([df1, df2, df3])
+    df = df1
 
     kg = KnowledgeGraph(df)
     train, valid, test = kg.split_kg(
@@ -58,14 +57,6 @@ def load_wiki_dataset(
     dataset: KnowledgeGraph, emb_dim: int = 100
 ) -> Tuple[Embedding, Embedding]:
 
-    with open(ent_vocab_path, "rb") as f:
-        ent_vocab = pickle.load(f)
-    with open(rel_vocab_path, "rb") as f:
-        rel_vocab = pickle.load(f)
-
-    ent_word = list(ent_vocab.keys())
-    rel_word = list(rel_vocab.keys())
-
     ent2ix = dataset.ent2ix
     rel2ix = dataset.rel2ix
     n_ent = dataset.n_ent
@@ -80,7 +71,7 @@ def load_wiki_dataset(
         torch.rand(emb_dim) for _ in range(n_rel)
     ]
     for ent, idx in ent2ix.items():
-        ent_list = split_phrase_to_word(ent_word[ent])
+        ent_list = split_phrase_to_word(ent2ix[ent])
         ent_vec = []
         for _ent in ent_list:
             try:
@@ -91,7 +82,7 @@ def load_wiki_dataset(
             ent_weight[idx] = torch.stack(ent_vec).sum(dim=0)
 
     for rel, idx in rel2ix.items():
-        rel_list = split_phrase_to_word(rel_word[rel])
+        rel_list = split_phrase_to_word(rel2ix[rel])
 
         rel_vec = []
         for _rel in rel_list:
