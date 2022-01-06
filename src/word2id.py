@@ -54,4 +54,3 @@ with open(ent2id_path, "wb") as f:
 
 with open(rel2id_path, "wb") as f:
     pickle.dump(rel2id, f)
-    print(rel2id)
